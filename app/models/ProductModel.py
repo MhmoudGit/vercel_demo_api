@@ -3,7 +3,7 @@ from ..data.db import Base
 from sqlalchemy import Column, Integer, String, Boolean, Numeric, TIMESTAMP, text
 from pydantic import BaseModel, validator
 
-# model for product of the postgres database
+# postgres model for product of the postgres database
 class Product(Base):
     __tablename__ = 'products'
 
@@ -16,7 +16,7 @@ class Product(Base):
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()')) 
 
 
-#model for creating products from api for fastapi
+# pydantic model for creating products from api for fastapi
 class ProductCreate(BaseModel):
     name: str
     category: str
