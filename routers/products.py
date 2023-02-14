@@ -7,17 +7,20 @@ from data.db import my_products
 
 
 # create an instance of apirouter and call it
-router = APIRouter()
+router = APIRouter(
+    prefix="/products", 
+    tags=["products"],
+)
 
 
 # get_products path
-@router.get('/products')
+@router.get('/')  #its jus '/' because the prefix is set to products so no need to write '/products'
 def get_products():
     return {'data': my_products}
 
 
 # post_products to products path
-@router.post('/products')
+@router.post('/')
 def create_product(product: Product):
     if product.price_kg is None and product.price_item is None:
         raise HTTPException(
@@ -36,7 +39,7 @@ def find_product(id: int):
 
 
 # get single product
-@router.get('/products/{id}')
+@router.get('/{id}')
 def get_product(id: int):
     p = find_product(id)
     if p:
