@@ -1,16 +1,13 @@
 # import apirouter to be able to use this file in main.py
 from fastapi import APIRouter, HTTPException
 # importing models for schemas
-from models import ProductModel
+from models.ProductModel import Product
 from random import randrange
-from data import my_products
+from data.db import my_products
 
 
 # create an instance of apirouter and call it
 router = APIRouter()
-# model for product
-Product = ProductModel.Product
-
 
 
 # get_products path
