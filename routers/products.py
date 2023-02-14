@@ -43,4 +43,4 @@ def get_product(id: int):
         return p
     else:
         raise HTTPException(
-            status_code= status.HTTP_404_NOT_FOUND, detail="Product doesnt exist")
+            status_code= status.HTTP_404_NOT_FOUND, detail=f"Product with id {id} doesnt exist")
