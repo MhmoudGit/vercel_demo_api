@@ -4,7 +4,6 @@ from fastapi import FastAPI, Depends
 from .routers import products
 from .models import ProductModel
 from .data.db import engine, get_db
-from sqlalchemy.orm import Session
 
 # initiate the database and create the tables 
 ProductModel.Base.metadata.create_all(bind=engine)
