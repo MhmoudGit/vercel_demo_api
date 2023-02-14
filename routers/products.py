@@ -67,5 +67,4 @@ def update_product(id: int, product: Product):
     else: 
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Product with id {id} doesnt exist")
-    print(p)
     return {'data' : product}
