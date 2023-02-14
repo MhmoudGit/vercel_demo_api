@@ -1,21 +1,14 @@
 # firstly import fastapi
 from fastapi import FastAPI, HTTPException
-# importing pydantic for schemas
-from pydantic import BaseModel
+# importing models for schemas
+from models import ProductModel
 from random import randrange
 
 
 # create an instance of fastapi and call it
 app = FastAPI()
-
-
 # model for product
-class Product(BaseModel):
-    name: str
-    category: str
-    available: bool
-    price_kg: int = None
-    price_item: int = None
+Product = ProductModel.Product
 
 
 # products db example:
@@ -55,13 +48,15 @@ def create_product(product: Product):
     return {'data': product_dict}
 
 
-#find poroduct by id
+# find poroduct by id
 def find_product(id: int):
     for p in my_products:
         if p["id"] == id:
             return p
 
-#get single product
+# get single product
+
+
 @app.get('/products/{id}')
 def get_product(id: int):
     p = find_product(id)
