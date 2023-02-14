@@ -1,7 +1,7 @@
 # firstly import fastapi
 from fastapi import FastAPI
 # importing routes from routers file
-from routers import products
+from .routers import products
 
 
 # create an instance of fastapi and call it
