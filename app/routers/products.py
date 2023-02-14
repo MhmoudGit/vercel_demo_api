@@ -1,16 +1,9 @@
 # import apirouter to be able to use this file in main.py
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
+from sqlalchemy.orm import Session
 # importing models for schemas
-from ..models.ProductModel import Product
-from random import randrange
-from ..data.db import my_products
-
-# ------needed logic -------#
-# find poroduct by id
-def find_product(id: int):
-    for p in my_products:
-        if p["id"] == id:
-            return p
+from ..models.ProductModel import Product, ProductCreate
+from ..data.db import get_db
 
 
 # create an instance of apirouter and call it
@@ -20,51 +13,58 @@ router = APIRouter(
 )
 
 # get all products path
-@router.get('/')    # its just '/' because the prefix is set to products so no need to write '/products'
-def get_products():
-    return {'data': my_products}
+# its just '/' because the prefix is set to products so no need to write '/products'
+@router.get('/')
+def get_products(db: Session = Depends(get_db)):
+    products = db.query(Product).all()
+    return {'data': products}
 
 # post/create product to products path
 @router.post('/', status_code=status.HTTP_201_CREATED)
-def create_product(product: Product):
+def create_product(product: ProductCreate, db: Session = Depends(get_db)):
     if (product.price_kg is None and product.price_item is None) or (product.price_kg and product.price_item):
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Either price_kg or price_item must be specified and not both")
-    product_dict = product.dict()
-    product_dict["id"] = randrange(0, 10000000)
-    my_products.append(product_dict)
-    return {'data': product_dict}
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Either price_kg or price_item must be specified and also not both at the same time")
+    new_product = Product(**product.dict())
+    db.add(new_product)
+    db.commit()
+    db.refresh(new_product)
+    return {'data': new_product}
+
 
 # get single product
 @router.get('/{id}')
-def get_product(id: int):
-    p = find_product(id)
-    if p:
-        return p
+def get_product(id: int, db: Session = Depends(get_db)):
+    single_product = db.query(Product).filter(Product.id == id).first()
+    if single_product:
+        return single_product
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Product with id {id} doesnt exist")
 
+
 #delete a single product
 @router.delete('/{id}')
-def delete_product(id: int):
-    p = find_product(id)
-    if p:
-        my_products.remove(p)
-        return p
-    else: 
+def delete_product(id: int, db: Session = Depends(get_db)):
+    product_to_delete = db.query(Product).filter(Product.id == id)
+    if product_to_delete.first():
+        product_to_delete.delete(synchronize_session=False)
+        db.commit()
+        return {'message': f'product with id {id} was deleted successfully'}
+    else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Product with id {id} doesnt exist")
 
+
 # updating a product
 @router.put('/{id}')
-def update_product(id: int, product: Product):
-    p = find_product(id)
-    product_dict = product.dict()
-    if p is not None and p['id'] == id:
-        product_dict['id'] = id
-        my_products[my_products.index(p)] = product_dict
-    else: 
+def update_product(id: int, product: ProductCreate, db: Session = Depends(get_db)):
+    product_to_update = db.query(Product).filter(Product.id == id)
+    if product_to_update.first() is not None:
+        product_to_update.update(product.dict(), synchronize_session=False)
+        db.commit()
+        return {'data' : product_to_update.first()}
+    else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Product with id {id} doesnt exist")
-    return {'data' : product}
+    
