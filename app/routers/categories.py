@@ -16,9 +16,8 @@ router = APIRouter(
 # its just '/' because the prefix is set to categorys so no need to write '/categorys'
 @router.get('/')
 def get_categories(db: Session = Depends(get_db)):
-    categories = db.query(Category).filter(Category.category_name == 'بقوليات').first()
-    
-    return {'data': categories.products}
+    categories = db.query(Category).all()
+    return {'data': categories}
 
 # post/create category to categorys path
 @router.post('/', status_code=status.HTTP_201_CREATED)
@@ -39,9 +38,31 @@ def create_category(category: CategoryCreate, db: Session = Depends(get_db)):
 def get_category(id: int, db: Session = Depends(get_db)):
     single_category = db.query(Category).filter(Category.id == id).first()
     if single_category:
-        return single_category
+        return {'data': single_category}
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"category with id {id} doesnt exist")
-    
 
+
+# get single category products
+@router.get('/{id}/products')
+def get_category(id: int, db: Session = Depends(get_db)):
+    single_category = db.query(Category).filter(Category.id == id).first()
+    if single_category:
+        return {'data': single_category.products}
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"category with id {id} doesnt exist")
+
+
+#delete a single Category
+@router.delete('/{id}')
+def delete_product(id: int, db: Session = Depends(get_db)):
+    category_to_delete = db.query(Category).filter(Category.id == id)
+    if category_to_delete.first():
+        category_to_delete.delete(synchronize_session=False)
+        db.commit()
+        return {'message': f'category with id {id} was deleted successfully'}
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"category with id {id} doesnt exist")
