@@ -1,7 +1,7 @@
 # firstly import fastapi
 from fastapi import FastAPI, Depends
 # importing routes from routers file
-from .routers import products
+from .routers import products, categories
 from .models import ProductModel, CategoryModel
 from .data.db import engine, get_db
 
@@ -20,5 +20,6 @@ def home():  # function
 
 #products route
 app.include_router(products.router)
+app.include_router(categories.router)
 
 

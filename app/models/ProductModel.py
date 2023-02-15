@@ -2,6 +2,7 @@
 from ..data.db import Base
 from sqlalchemy import Column, Integer, String, Boolean, Numeric, TIMESTAMP, text, ForeignKey
 from pydantic import BaseModel, validator
+from sqlalchemy.orm import relationship
 
 # postgres model for product of the postgres database
 class Product(Base):
@@ -14,6 +15,8 @@ class Product(Base):
     price_kg = Column(Numeric, nullable=True)
     price_item = Column(Numeric, nullable=True)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()')) 
+
+    category = relationship('Category', back_populates='products')
 
 
 # pydantic model for creating products from api for fastapi
