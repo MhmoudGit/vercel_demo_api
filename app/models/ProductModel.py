@@ -1,7 +1,6 @@
 # import base from db file for the schemas
 from ..data.db import Base
 from sqlalchemy import Column, Integer, String, Boolean, Numeric, TIMESTAMP, text, ForeignKey
-from sqlalchemy.orm import relationship
 from pydantic import BaseModel, validator
 
 # postgres model for product of the postgres database
