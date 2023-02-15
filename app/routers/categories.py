@@ -12,14 +12,14 @@ router = APIRouter(
     tags=["categories"],
 )
 
-# get all categorys path
-# its just '/' because the prefix is set to categorys so no need to write '/categorys'
+# get all categories path
+# its just '/' because the prefix is set to categories so no need to write '/categories'
 @router.get('/')
 def get_categories(db: Session = Depends(get_db)):
     categories = db.query(Category).all()
     return {'data': categories}
 
-# post/create category to categorys path
+# post/create category to categories path
 @router.post('/', status_code=status.HTTP_201_CREATED)
 def create_category(category: CategoryCreate, db: Session = Depends(get_db)):
     new_category = Category(**category.dict())
