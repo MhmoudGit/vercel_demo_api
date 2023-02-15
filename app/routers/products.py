@@ -25,7 +25,13 @@ def create_product(product: ProductCreate, db: Session = Depends(get_db)):
     if (product.price_kg is None and product.price_item is None) or (product.price_kg and product.price_item):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Either price_kg or price_item must be specified and also not both at the same time")
+
     new_product = Product(**product.dict())
+    query = db.query(Product).filter(Product.name == new_product.name and Product.category_name == product.category_name).first()
+    if query is not None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="this product already exist")
+            
     db.add(new_product)
     db.commit()
     db.refresh(new_product)

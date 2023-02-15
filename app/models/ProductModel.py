@@ -1,6 +1,7 @@
 # import base from db file for the schemas
 from ..data.db import Base
-from sqlalchemy import Column, Integer, String, Boolean, Numeric, TIMESTAMP, text
+from sqlalchemy import Column, Integer, String, Boolean, Numeric, TIMESTAMP, text, ForeignKey
+from sqlalchemy.orm import relationship
 from pydantic import BaseModel, validator
 
 # postgres model for product of the postgres database
@@ -9,7 +10,7 @@ class Product(Base):
 
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String, nullable=False)
-    category = Column(String, nullable=False)
+    category_name = Column(String, ForeignKey('categories.category_name', ondelete='CASCADE'), nullable=False)
     available = Column(Boolean, nullable=False)
     price_kg = Column(Numeric, nullable=True)
     price_item = Column(Numeric, nullable=True)
@@ -19,7 +20,7 @@ class Product(Base):
 # pydantic model for creating products from api for fastapi
 class ProductCreate(BaseModel):
     name: str
-    category: str
+    category_name: str
     available: bool
     price_kg: float = None
     price_item: float = None
