@@ -57,7 +57,7 @@ def get_category(id: int, db: Session = Depends(get_db)):
 
 #delete a single Category
 @router.delete('/{id}')
-def delete_product(id: int, db: Session = Depends(get_db)):
+def delete_category(id: int, db: Session = Depends(get_db)):
     category_to_delete = db.query(Category).filter(Category.id == id)
     if category_to_delete.first():
         category_to_delete.delete(synchronize_session=False)
@@ -66,3 +66,18 @@ def delete_product(id: int, db: Session = Depends(get_db)):
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"category with id {id} doesnt exist")
+
+
+# updating a category
+@router.put('/{id}')
+def update_categoryt(id: int, category: CategoryCreate, db: Session = Depends(get_db)):
+    category_to_update = db.query(Category).filter(Category.id == id)
+    filter_name = db.query(Category).filter(Category.category_name == category.category_name).first()
+    if category_to_update.first() is not None and filter_name is None:
+        category_to_update.update(category.dict(), synchronize_session=False)
+        db.commit()
+        return {'data' : category_to_update.first()}
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"category with id {id} doesnt exist or the new category name already exist")
+    
