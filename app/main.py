@@ -1,9 +1,9 @@
 # firstly import fastapi
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 # importing routes from routers file
 from .routers import products, categories
 from .models import ProductModel, CategoryModel
-from .data.db import engine, get_db
+from .data.db import engine
 
 # initiate the database and create the tables 
 ProductModel.Base.metadata.create_all(bind=engine)
