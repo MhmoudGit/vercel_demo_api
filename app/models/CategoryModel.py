@@ -10,7 +10,7 @@ from typing import List
 class Category(Base):
     __tablename__ = 'categories'
 
-    id = Column(Integer, primary_key=True, nullable=False)
+    id = Column(Integer, primary_key=True, nullable=False, unique=True) 
     category_name = Column(String, nullable=False, unique=True)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()')) 
     

@@ -10,7 +10,7 @@ class Product(Base):
 
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String, nullable=False)
-    category_name = Column(String, ForeignKey('categories.category_name', ondelete='CASCADE'), nullable=False)
+    category_id = Column(Integer, ForeignKey('categories.id', ondelete='CASCADE'), nullable=False)
     available = Column(Boolean, nullable=False)
     price_kg = Column(Numeric, nullable=True)
     price_item = Column(Numeric, nullable=True)
@@ -22,10 +22,11 @@ class Product(Base):
 # pydantic model for creating products from api for fastapi
 class ProductCreate(BaseModel):
     name: str
-    category_name: str
+    category_id: int
     available: bool
     price_kg: float = None
     price_item: float = None
+    # category_name: CategoryCreate
     class Config:
         orm_mode = True
 
