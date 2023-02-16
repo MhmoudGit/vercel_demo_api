@@ -2,7 +2,7 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from sqlalchemy.orm import Session
 # importing models for schemas
-from ..models.CategoryModel import Category, CategoryCreate, CategoryGet
+from ..models.CategoryModel import Category, CategoryCreate
 from ..data.db import get_db
 
 
