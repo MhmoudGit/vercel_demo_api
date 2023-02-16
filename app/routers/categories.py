@@ -2,7 +2,7 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from sqlalchemy.orm import Session
 # importing models for schemas
-from ..models.CategoryModel import Category, CategoryCreate
+from ..models.CategoryModel import Category, CategoryCreate, CategoryGet
 from ..data.db import get_db
 
 
@@ -34,11 +34,11 @@ def create_category(category: CategoryCreate, db: Session = Depends(get_db)):
 
 
 # get single category
-@router.get('/{id}')
+@router.get('/{id}', response_model=CategoryGet)
 def get_category(id: int, db: Session = Depends(get_db)):
     single_category = db.query(Category).filter(Category.id == id).first()
     if single_category:
-        return {'data': single_category}
+        return single_category
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"category with id {id} doesnt exist")
