@@ -17,7 +17,7 @@ router = APIRouter(
 @router.get('/')
 def get_categories(db: Session = Depends(get_db)):
     categories = db.query(Category).all()
-    return {'data': categories}
+    return categories
 
 # post/create category to categories path
 @router.post('/', status_code=status.HTTP_201_CREATED)
@@ -49,7 +49,7 @@ def get_category(id: int, db: Session = Depends(get_db)):
 def get_category(id: int, db: Session = Depends(get_db)):
     single_category = db.query(Category).filter(Category.id == id).first()
     if single_category:
-        return {'data': single_category.products}
+        return single_category.products
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"category with id {id} doesnt exist")
@@ -76,7 +76,7 @@ def update_categoryt(id: int, category: CategoryCreate, db: Session = Depends(ge
     if category_to_update.first() is not None and filter_name is None:
         category_to_update.update(category.dict(), synchronize_session=False)
         db.commit()
-        return {'data' : category_to_update.first()}
+        return {'updated data' : category_to_update.first()}
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"category with id {id} doesnt exist or the new category name already exist")
