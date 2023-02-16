@@ -15,8 +15,8 @@ router = APIRouter(
 # get all products path
 # its just '/' because the prefix is set to products so no need to write '/products'
 @router.get('/')
-def get_products(db: Session = Depends(get_db)):
-    products = db.query(Product).all()
+def get_products(db: Session = Depends(get_db), limit: int = 10, skip:int = 0):
+    products = db.query(Product).limit(limit).offset(skip).all()
     return {'data': products}
 
 # post/create product to products path
