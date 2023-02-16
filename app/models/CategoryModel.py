@@ -4,6 +4,7 @@ from sqlalchemy import Column, Integer, String, TIMESTAMP, text
 from sqlalchemy.orm import relationship
 from pydantic import BaseModel
 from .ProductModel import ProductCreate
+from typing import List
 
 # postgres model for product of the postgres database
 class Category(Base):
@@ -23,5 +24,8 @@ class CategoryCreate(BaseModel):
 #pydantic model for geting categories from api for fastapi
 class CategoryGet(BaseModel):
     category_name: str 
-    products: ProductCreate
+    products: List[ProductCreate]
+
+    class Config:
+        orm_mode = True
     

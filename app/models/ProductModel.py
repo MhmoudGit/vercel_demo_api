@@ -26,6 +26,8 @@ class ProductCreate(BaseModel):
     available: bool
     price_kg: float = None
     price_item: float = None
+    class Config:
+        orm_mode = True
 
 # validation for either one of the prices and not both exist or doesnt exist
 @validator('price_kg', 'price_item', pre=True)
