@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 # importing models for schemas
 from ..models.ProductModel import Product, ProductCreate
 from ..data.db import get_db
+from typing import Optional
 
 
 # create an instance of apirouter and call it
@@ -15,8 +16,8 @@ router = APIRouter(
 # get all products path
 # its just '/' because the prefix is set to products so no need to write '/products'
 @router.get('/')
-def get_products(db: Session = Depends(get_db), limit: int = 10, skip:int = 0):
-    products = db.query(Product).limit(limit).offset(skip).all()
+def get_products(db: Session = Depends(get_db), limit: int = 10, skip:int = 0, search: Optional[str] = ''):
+    products = db.query(Product).filter(Product.name.contains(search)).limit(limit).offset(skip).all()
     return {'data': products}
 
 # post/create product to products path
