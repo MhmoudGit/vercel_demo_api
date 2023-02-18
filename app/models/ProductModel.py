@@ -1,8 +1,11 @@
 # import base from db file for the schemas
 from ..data.db import Base
-from sqlalchemy import Column, Integer, String, Boolean, Numeric, TIMESTAMP, text, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, Numeric, TIMESTAMP, text, ForeignKey, LargeBinary
 from pydantic import BaseModel, validator
 from sqlalchemy.orm import relationship
+from fastapi import UploadFile, File, Form
+from typing import Optional
+
 
 # postgres model for product of the postgres database
 class Product(Base):
@@ -15,17 +18,19 @@ class Product(Base):
     price_kg = Column(Numeric, nullable=True)
     price_item = Column(Numeric, nullable=True)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()')) 
+    image = Column(LargeBinary)
 
-    category = relationship('Category', back_populates='products')
+    category = relationship('Category', back_populates='products') 
 
 
 # pydantic model for creating products from api for fastapi
 class ProductCreate(BaseModel):
-    name: str
-    category_id: int
-    available: bool
-    price_kg: float = None
-    price_item: float = None
+    name: str = Form(...)
+    category_id: int = Form(...)
+    available: bool = Form(...)
+    price_kg: Optional[float] = Form(None)
+    price_item: Optional[float] = Form(None)
+    image: UploadFile = File(...)
     # category_name: CategoryCreate
     class Config:
         orm_mode = True
