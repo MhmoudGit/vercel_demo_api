@@ -67,14 +67,14 @@ def delete_product(id: int, db: Session = Depends(get_db)):
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Product with id {id} doesnt exist")
 
 
-# updating a product
+# updating a product 
 @router.put('/{id}')
 async def update_product(id: int,name:str = Form(...), category_id: int = Form(...), available: bool = Form(...), price_kg: float = Form(None), price_item: float = Form(None),db: Session = Depends(get_db), image: UploadFile = File(...)):
     if (price_kg is None and price_item is None) or (price_kg is not None and price_item is not None):
             raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Either price_kg or price_item must be specified and also not both at the same time")
     
-    product: ProductCreate = {"name":name, "category_id":category_id, "available": available, "price_kg": price_kg, "price_item":price_item, "image":image.filename}
+    product: ProductCreate = {"name":name, "category_id":category_id, "available": available, "price_kg": price_kg, "price_item":price_item, "image":f"/images/{image.filename}"}
     with open(f"app/images/{image.filename}", "wb") as img_out:
         img_out.write(await image.read())
     
