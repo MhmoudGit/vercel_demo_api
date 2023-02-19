@@ -5,9 +5,6 @@ from sqlalchemy.orm import Session
 from ..models.ProductModel import Product, ProductCreate
 from ..data.db import get_db
 from typing import Optional
-import io
-from PIL import Image
-from fastapi.responses import FileResponse
 
 # create an instance of apirouter and call it
 router = APIRouter(
@@ -29,7 +26,7 @@ async def create_product(name:str = Form(...), category_id: int = Form(...), ava
             raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Either price_kg or price_item must be specified and also not both at the same time")
         
-        product: ProductCreate = {"name":name, "category_id":category_id, "available": available, "price_kg": price_kg, "price_item":price_item, "image":image.filename}
+        product: ProductCreate = {"name":name, "category_id":category_id, "available": available, "price_kg": price_kg, "price_item":price_item, "image":f"/images/{image.filename}"}
         
         with open(f"app/images/{image.filename}", "wb") as img_out:
             img_out.write(await image.read())
@@ -85,7 +82,7 @@ async def update_product(id: int,name:str = Form(...), category_id: int = Form(.
     if product_to_update.first() is not None:
         product_to_update.update(product, synchronize_session=False)
         db.commit()
-        return {'data' : product_to_update.first()}
+        return product_to_update.first()
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Product with id {id} doesnt exist")
