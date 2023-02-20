@@ -12,5 +12,8 @@
             "dest": "run.py"
             
         }
-    ]
+    ],
+    "serverless": {
+        "maxDuration": 30
+    }
 }
