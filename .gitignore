@@ -2,7 +2,7 @@
 *.ipynb_checkpoints/
 /data/
 /models/
-# app/images
+# app/images hiding images file
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
