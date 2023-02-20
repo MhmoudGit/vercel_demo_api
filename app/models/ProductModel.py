@@ -3,6 +3,7 @@ from ..data.db import Base
 from sqlalchemy import Column, Integer, String, Boolean, Numeric, TIMESTAMP, text, ForeignKey
 from pydantic import BaseModel, validator
 from sqlalchemy.orm import relationship
+from typing import Union
 
 
 # postgres model for product of the postgres database
@@ -26,8 +27,8 @@ class ProductCreate(BaseModel):
     name: str 
     category_id: int 
     available: bool
-    price_kg: float | None
-    price_item: float | None
+    price_kg: Union[float, None]
+    price_item: Union[float, None]
     image: str
     # category_name: CategoryCreate
     class Config:
