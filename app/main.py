@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 import os
+import http.server
 
 
 # initiate the database and create the tables 
@@ -54,5 +55,13 @@ app.include_router(products.router)
 app.include_router(categories.router)
 
 
+class SimpleHTTPRequestHandler(http.server.HTTPServer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 def handler(event, context):
+    server_address = (event['host'], int(event['port']))
+    httpd = SimpleHTTPRequestHandler(server_address, SimpleHTTPRequestHandler)
+    httpd.handle_request()
     return app(event, context)
+
+    
