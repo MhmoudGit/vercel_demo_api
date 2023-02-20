@@ -34,7 +34,7 @@ app.add_middleware(
 # routes/path operations
 @app.get('/') # decorator initialized by '@' then the instance of fastapi then the http method then the path or route'/'
 def home():  # function
-    return {'message': 'this is the home/login path'}
+    return {'message': 'this is the home/login path use /docs for more infos'}
 
 
 
