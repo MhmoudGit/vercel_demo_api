@@ -1,9 +1,9 @@
 # firstly import fastapi
 from fastapi import FastAPI, HTTPException, status
 # importing routes from routers file
-from .app.routers import products, categories
-from .app.models import ProductModel, CategoryModel
-from .app.data.db import engine
+from .routers import products, categories
+from .models import ProductModel, CategoryModel
+from .data.db import engine
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -17,7 +17,7 @@ CategoryModel.Base.metadata.create_all(bind=engine)
 # create an instance of fastapi and call it
 app = FastAPI()
 
-app.mount("/images", StaticFiles(directory="api/app/images"), name="images") 
+app.mount("/images", StaticFiles(directory="app/images"), name="images") 
 
 origins = [
     "http://localhost:3000"
