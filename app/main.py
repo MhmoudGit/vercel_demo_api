@@ -20,10 +20,7 @@ app = FastAPI()
 app.mount("/images", StaticFiles(directory="app/images"), name="images") 
 
 origins = [
-    # "http://localhost.tiangolo.com",
-    # "https://localhost.tiangolo.com",
-    # "http://localhost",
-    "http://localhost:3000",
+    "http://localhost:3000"
 ]
 
 app.add_middleware(
