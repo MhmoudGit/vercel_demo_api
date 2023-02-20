@@ -2,7 +2,7 @@
 *.ipynb_checkpoints/
 /data/
 /models/
-app/images
+# app/images
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -170,3 +170,4 @@ poetry.toml
 
 # ruff
 .ruff_cache/
+.vercel
