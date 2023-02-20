@@ -1,19 +1,17 @@
 {
-    "version": 2,
-    "builds": [
-        {
-            "src": "run.py",
-            "use": "@vercel/python"
-        }
-    ],
-    "routes": [
-        {
-            "src": "(/(.*))",
-            "dest": "run.py"
-            
-        }
-    ],
-    "serverless": {
-        "maxDuration": 30
-    }
-}  
+	"version": 2,
+	"builds": [
+		{
+			"src": "api/run.py",
+			"use": "@vercel/python"
+		}
+	],
+	"routes": [
+		{
+			"src": "(/**/*.py)",
+			"dest": "run.py"
+		}
+	],
+	"maxDuration": 30,
+	"cleanUrls": true
+}
