@@ -17,7 +17,7 @@ CategoryModel.Base.metadata.create_all(bind=engine)
 # create an instance of fastapi and call it
 app = FastAPI()
 
-app.mount("/images", StaticFiles(directory="app/images"), name="images") 
+app.mount("/images", StaticFiles(directory="api/images"), name="images") 
 
 origins = [
     "http://localhost:3000"
@@ -41,9 +41,9 @@ def home():  # function
 ## get the image src for the frontend
 @app.get("/image/{filename}")
 async def read_image(filename: str):
-    files = os.listdir("app/images")
+    files = os.listdir("api/images")
     if filename in files:
-        return FileResponse(f"app/images/{filename}", media_type="image/jpeg")
+        return FileResponse(f"api/images/{filename}", media_type="image/jpeg")
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Image does not exist")
