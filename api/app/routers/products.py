@@ -28,7 +28,7 @@ async def create_product(name:str = Form(...), category_id: int = Form(...), ava
         
         product: ProductCreate = {"name":name, "category_id":category_id, "available": available, "price_kg": price_kg, "price_item":price_item, "image":f"/images/{image.filename}"}
         
-        with open(f"app/images/{image.filename}", "wb") as img_out:
+        with open(f"api/app/images/{image.filename}", "wb") as img_out:
             img_out.write(await image.read())
         new_product = Product(**product)
         
@@ -75,7 +75,7 @@ async def update_product(id: int,name:str = Form(...), category_id: int = Form(.
             status_code=status.HTTP_400_BAD_REQUEST, detail="Either price_kg or price_item must be specified and also not both at the same time")
     
     product: ProductCreate = {"name":name, "category_id":category_id, "available": available, "price_kg": price_kg, "price_item":price_item, "image":f"/images/{image.filename}"}
-    with open(f"app/images/{image.filename}", "wb") as img_out:
+    with open(f"api/app/images/{image.filename}", "wb") as img_out:
         img_out.write(await image.read())
     
     product_to_update = db.query(Product).filter(Product.id == id)
