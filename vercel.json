@@ -10,6 +10,8 @@
         {
             "src": "(./(.*))",
             "dest": "app/main.py"
+            
         }
-    ]
+    ],
+    "rewrites": [{ "source": "/app/(.*)", "destination": "/app/main.py" }]
 }
