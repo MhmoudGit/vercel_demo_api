@@ -6,11 +6,5 @@
 			"use": "@vercel/python"
 		}
 	],
-	"routes": [
-		{
-			"src": "(/**/*.py)",
-			"dest": "run.py"
-		}
-	],
 	"cleanUrls": true
 }
