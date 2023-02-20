@@ -6,7 +6,5 @@
 			"use": "@vercel/python"
 		}
 	],
-	"routes": [
-		{ "src": "/app", "methods": ["GET"], "dest": "/main.py" }
-	]
+	"cleanUrls": true
 }
