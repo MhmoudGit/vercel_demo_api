@@ -54,3 +54,5 @@ app.include_router(products.router)
 app.include_router(categories.router)
 
 
+def handler(event, context):
+    return app(event, context)
