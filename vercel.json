@@ -9,7 +9,14 @@
 	"routes": [
 		{ "handle": "filesystem" },
 		{
-			"src":"/(.*)",
+			"src": "/api/(.*)",
+			"dest": "/api/$1",
+			"headers": {
+				"Cache-Control": "public, max-age=3600"
+			}
+		},
+		{
+			"src": "/(.*)",
 			"dest": "api/main.py"
 		}
 	]

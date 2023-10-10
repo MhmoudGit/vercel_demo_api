@@ -6,7 +6,7 @@ from .models import ProductModel, CategoryModel
 from .data.db import engine
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.responses import FileResponse
 import os
 
 
@@ -32,20 +32,12 @@ app.add_middleware(
 )
 
 # routes/path operations
-@app.get("/", response_class=HTMLResponse)
+@app.get("/", response_class=FileResponse)
 async def read_root():
-    html_content = """
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>FastAPI on Vercel</title>
-    </head>
-    <body>
-        <h1>Hello, FastAPI on Vercel!</h1>
-    </body>
-    </html>
-    """
-    return HTMLResponse(content=html_content)
+    # Path to your HTML file
+    html_file_path = "api/main.html"
+
+    return html_file_path
 
 
 ## get the image src for the frontend
