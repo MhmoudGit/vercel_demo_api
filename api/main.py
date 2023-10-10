@@ -6,7 +6,7 @@ from .models import ProductModel, CategoryModel
 from .data.db import engine
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
 import os
 
 
@@ -32,10 +32,20 @@ app.add_middleware(
 )
 
 # routes/path operations
-@app.get('/') # decorator initialized by '@' then the instance of fastapi then the http method then the path or route'/'
-def home():  # function
-    return {'message': 'this is the home/login path use /docs for more infos'}
-
+@app.get("/", response_class=HTMLResponse)
+async def read_root():
+    html_content = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>FastAPI on Vercel</title>
+    </head>
+    <body>
+        <h1>Hello, FastAPI on Vercel!</h1>
+    </body>
+    </html>
+    """
+    return HTMLResponse(content=html_content)
 
 
 ## get the image src for the frontend
